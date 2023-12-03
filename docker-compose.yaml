@@ -1,0 +1,58 @@
+version: '3.8'
+services:
+  db:
+    image: mongo:6-jammy
+    ports:
+      - '27018:27018'
+    container_name: mongodb
+    volumes:
+      - dbdata6:/data/db
+  booking:
+    image: go-booking
+    build:
+      context: .
+      dockerfile: ./go-booking/Dockerfile
+    ports:
+    - '8080:8080'
+    command: ["/go-booking"]
+    environment:
+      - DOCKER_COMPOSE=true
+    networks:
+      - assignment
+    depends_on:
+      - db
+    
+  price:
+    image: go-price
+    build:
+      context: .
+      dockerfile: ./go-price/Dockerfile
+    ports:
+    - '8081:8081'
+    command: ["/go-booking"]
+    environment:
+      - DOCKER_COMPOSE=true
+    networks:
+      - assignment
+    depends_on:
+      - db
+  send-job:
+    image: go-send-job
+    build:
+      context: .
+      dockerfile: ./go-send-job/Dockerfile
+    ports:
+    - '8082:8082'
+    command: ["/go-booking"]
+    environment:
+      - DOCKER_COMPOSE=true
+    networks:
+      - assignment
+    depends_on:
+      - db
+    
+
+networks:
+  assignment:
+volumes:
+  dbdata6:

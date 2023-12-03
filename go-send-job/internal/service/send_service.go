@@ -51,6 +51,9 @@ func (s *sendJobService) SendJob(ctx context.Context, jobId string, userId []str
 	}
 	tokenList := getListDeviceToken(ctx, deviceTokens)
 
+	
+	// will run in transaction in the future
+
 	// send notification
 	var inInterface map[string]string
 	inrec, _ := json.Marshal(booking)
